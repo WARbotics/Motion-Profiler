@@ -1,48 +1,60 @@
 import math
 
-class LinearPathGenerator():
+
+class LinearPathGenerator:
     
     # Use graphs to makesure that everything is being correctly setup
      
-    def __init__(self, *args, **kwargs):
+    def __init__(self, waypoints):
         self.waypoints = waypoints
-        self.path = [] 
-
+        self.path = []
 
     def build_path(self):
-        for i in range(len(waypoints)):
-            if i > 0:
-                dx = waypoints[i].getX() - waypoints[i-1].getX() 
-                dy = waypoints[i].getY() - waypoints[i-1].getY()
+        for i in range(len(self.waypoints)):
+            if i < len(self.waypoints)-1:
+                dx = self.waypoints[i+1].getX() - self.waypoints[i].getX()
+                dy = self.waypoints[i+1].getY() - self.waypoints[i].getY()  
                 distance = math.sqrt((dx*dx) + (dy*dy)) 
-                dtheta = math.degrees(math.atan2(dy,dx)) # This is relative. we need a global angle of the robot that is the unit circle 
-                if dx > 0:
-                    global_theta = self.path[i-1] - theta
-                    dtheta = math.degrees(math.atan2(dy,dx))
+        
+                if i == 0:
+                    if dx > 0:
+                        
+                        dtheta = math.degrees(math.atan2(dy, dx))
+                        global_theta = 90 - dtheta
+                    else:
+                        dtheta = -1*math.degrees(math.atan2(dy, dx)) # Change this to be like bruces turning angle and theta graph 
+                        global_theta = 90 + dtheta
                 else:
-                    global_theta = self.path[i-1] + theta
-                    dtheta = -1*math.degrees(math.atan2(dy,dx))
-                self.path.append({"x": waypoints[i].getX(), 
-                                "y": waypoints[i].getY(),
-                                "dx": dx, 
-                                "dy" dy, 
-                                "distnace": distance, 
-                                "dtheta": dtheta,
-                                "global_theta":global_theta, 
-                                "time": waypoints[i].getTime()})
-            else: 
-                self.path.append({"x": 0, 
-                    "y": 0,
-                    "dx":0,
-                    "dy":0, 
-                    "distance": 0, 
-                    "dtheta": 0,
-                    "global_theta": 90, 
-                    "time": 0})
+                    if dx > 0:
+                        dtheta = math.degrees(math.atan2(dy, dx)) - self.path[i-1]['dtheta']
+                        global_theta = self.path[i-1]['global_theta'] - dtheta
+                    else:
+                        dtheta = math.degrees(math.atan2(dy, dx)) - self.path[i-1]['dtheta']
+                        dtheta = -1*dtheta
+                        global_theta = self.path[i-1]['global_theta'] + dtheta # <------this is a mess and I dont know wtf is going on!
+                self.path.append({
+                                    'x': self.waypoints[i].getX(), 
+                                    'y': self.waypoints[i].getY(),
+                                    'dx': dx, 
+                                    'dy': dy, 
+                                    'distnace': distance, 
+                                    'dtheta': dtheta,
+                                    'global_theta': global_theta, 
+                                    'time': self.waypoints[i].getTime()
+                                })
+                print(str({
+                                    'x': self.waypoints[i].getX(), 
+                                    'y': self.waypoints[i].getY(),
+                                    'dx': dx, 
+                                    'dy': dy, 
+                                    'distnace': distance, 
+                                    'dtheta': dtheta,
+                                    'global_theta': global_theta, 
+                                    'time': self.waypoints[i].getTime()
+                                }))
             
-
     def get_path(self):
-        return path
+        return self.path
 
 
 

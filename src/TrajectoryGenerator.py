@@ -7,4 +7,6 @@ class TrajectoryGenerator():
         self.MAX_V
 
     def generate(self):
-        
+        pass
+
+        # For 2D, you need to make three graphs for x,y,theta for the spline and through numeriacal integration

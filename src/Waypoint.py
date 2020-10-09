@@ -1,16 +1,16 @@
-class Waypoint():
+class Waypoint:
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, x, y, seq, time):
         self.x = x  # Meters from the origin 
         self.y = y 
         self.seq = seq
-        self.time
+        self.time = time
 
     def getX(self,):
         return self.x
 
     def getY(self):
-        return self.y;
+        return self.y
  
     def getSeq(self):
         return self.seq
