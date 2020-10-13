@@ -15,31 +15,28 @@ class LinearPathGenerator:
                 dx = self.waypoints[i+1].getX() - self.waypoints[i].getX()
                 dy = self.waypoints[i+1].getY() - self.waypoints[i].getY()  
                 distance = math.sqrt((dx*dx) + (dy*dy)) 
-        
                 if i == 0:
                     if dx > 0:
                         
-                        dtheta = math.degrees(math.atan2(dy, dx))
-                        global_theta = 90 - dtheta
+                        robot_theta = math.degrees(math.atan2(dy, dx))
+                        turning_theta = -1*robot_theta
+                    
                     else:
-                        dtheta = -1*math.degrees(math.atan2(dy, dx)) # Change this to be like bruces turning angle and theta graph 
-                        global_theta = 90 + dtheta
+                        robot_theta = math.degrees(math.atan2(dy, dx)) - 90# Change this to be like bruces turning angle and theta graph 
+                        turning_theta = robot_theta 
                 else:
-                    if dx > 0:
-                        dtheta = math.degrees(math.atan2(dy, dx)) - self.path[i-1]['dtheta']
-                        global_theta = self.path[i-1]['global_theta'] - dtheta
-                    else:
-                        dtheta = math.degrees(math.atan2(dy, dx)) - self.path[i-1]['dtheta']
-                        dtheta = -1*dtheta
-                        global_theta = self.path[i-1]['global_theta'] + dtheta # <------this is a mess and I dont know wtf is going on!
+                    robot_theta = math.degrees(math.atan2(dy, dx))
+                    turning_theta = robot_theta - self.path[i-1]['robot_theta']
+            
+                
                 self.path.append({
                                     'x': self.waypoints[i].getX(), 
                                     'y': self.waypoints[i].getY(),
                                     'dx': dx, 
                                     'dy': dy, 
-                                    'distnace': distance, 
-                                    'dtheta': dtheta,
-                                    'global_theta': global_theta, 
+                                    'distance': distance, 
+                                    'turning_theta': turning_theta,
+                                    'robot_theta': robot_theta, 
                                     'time': self.waypoints[i].getTime()
                                 })
                 print(str({
@@ -47,9 +44,9 @@ class LinearPathGenerator:
                                     'y': self.waypoints[i].getY(),
                                     'dx': dx, 
                                     'dy': dy, 
-                                    'distnace': distance, 
-                                    'dtheta': dtheta,
-                                    'global_theta': global_theta, 
+                                    'distance': distance, 
+                                    'turning_theta': turning_theta,
+                                    'robot_theta': robot_theta, 
                                     'time': self.waypoints[i].getTime()
                                 }))
             
